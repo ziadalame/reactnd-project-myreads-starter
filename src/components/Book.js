@@ -11,7 +11,7 @@ function Book({ book, changeShelf }) {
                 <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${imageLinks.thumbnail})` }}></div>
                     <div className="book-shelf-changer">
-                        <select value={book.shelf || 'none'} onChange={(changeEvent) => (changeShelf(id, changeEvent.target.value))}>
+                        <select value={book.shelf || 'none'} onChange={(changeEvent) => (changeEvent.target.value !== 'none' ? changeShelf(id, changeEvent.target.value) : null )}>
                             <option value="none" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>
