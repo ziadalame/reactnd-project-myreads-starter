@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-function Book({ book }) {
+function Book({ book, changeShelf }) {
 
     var { id, imageLinks, title, authors } = book
 
@@ -11,7 +11,7 @@ function Book({ book }) {
                 <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${imageLinks.thumbnail})` }}></div>
                     <div className="book-shelf-changer">
-                        <select>
+                        <select value={book.shelf || 'none'} onChange={(changeEvent) => (changeShelf(id, changeEvent.target.value))}>
                             <option value="none" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>
@@ -36,7 +36,8 @@ Book.propTypes = {
             thumbnail: PropTypes.string
         }),
         shelf: PropTypes.string
-    }).isRequired
+    }).isRequired,
+    changeShelf: PropTypes.func // isRequired is not necessary as it is always available
 }
 
 export default Book

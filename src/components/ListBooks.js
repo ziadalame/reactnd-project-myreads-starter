@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 
 import _ from 'lodash'
 
+import PropTypes from 'prop-types'
+
 import Shelf from './Shelf';
 
 import '../App.css'
@@ -11,8 +13,6 @@ import '../App.css'
 class ListBooks extends Component {
 
     render() {
-
-        console.log(this.props);
 
         return (
             <div className="list-books">
@@ -22,7 +22,12 @@ class ListBooks extends Component {
                 <div className="list-books-content">
                     <div>
                         {Object.keys(this.props.shelves).map((title) => {
-                            return <Shelf key={title} title={_.startCase(title)} books={this.props.shelves[title]} />
+                            return (<Shelf
+                                key={title}
+                                title={_.startCase(title)}
+                                books={this.props.shelves[title]}
+                                changeShelf={this.props.changeShelf}
+                            />)
                         })}
                     </div>
                 </div>
@@ -32,6 +37,11 @@ class ListBooks extends Component {
             </div>
         )
     }
+}
+
+ListBooks.propTypes = {
+    shelves: PropTypes.object.isRequired,
+    changeShelf: PropTypes.func // isRequired is not necessary as it is always available
 }
 
 export default ListBooks
