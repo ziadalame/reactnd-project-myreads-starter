@@ -44,6 +44,12 @@ Once done, the app will run at: http://localhost:3000/
 
 ## Screenshots
 
+#### Home
+![alt](https://github.com/ziadalame/reactnd-project-myreads-starter/blob/master/screenshots/home.jpg)
+#### Search with result
+![alt](https://github.com/ziadalame/reactnd-project-myreads-starter/blob/master/screenshots/search.jpg)
+#### Search with no result
+![alt](https://github.com/ziadalame/reactnd-project-myreads-starter/blob/master/screenshots/search-error.jpg)
 
 ## Backend Server
 
