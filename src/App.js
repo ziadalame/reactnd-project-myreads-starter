@@ -34,9 +34,7 @@ class BooksApp extends Component {
     componentDidMount() {
         this.getAllBooks().then((data) => {
             this.setState(data)
-            console.log('in')
         })
-        console.log('did mount')
     }
 
     getAllBooks = () => {
@@ -70,7 +68,7 @@ class BooksApp extends Component {
         if (!found) {
             allBooks.concat(selectedBook)
         }
-        
+
         this.setState({
             shelves: _.groupBy(allBooks, (book) => (book.shelf))
         })
