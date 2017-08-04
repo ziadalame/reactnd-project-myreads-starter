@@ -103,6 +103,17 @@ body, .app {
   padding: 80px 10px 20px;
 }
 
+.search-error {
+    background-color: #ff9286;
+    text-align: center;
+    color: #a50f00;
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 50px;
+    border-radius: 5px;
+    padding: 10px;
+}
+
 /* books grid */
 
 .books-grid {

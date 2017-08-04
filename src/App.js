@@ -21,15 +21,22 @@ class BooksApp extends Component {
                 currentlyReading: [],
                 wantToRead: [],
                 read: []
-            }
+            },
+            searchBooks: [],
+            searchErrorMessage: false
         }
+
+        // Throtle search to not spam the server
+        this.searchForBooks = _.debounce(this.searchForBooks, 1000);
     }
 
     // Fetch data after render finishes
     componentDidMount() {
         this.getAllBooks().then((data) => {
             this.setState(data)
+            console.log('in')
         })
+        console.log('did mount')
     }
 
     getAllBooks = () => {
@@ -43,27 +50,33 @@ class BooksApp extends Component {
         })
     }
 
-    changeShelf = (bookId, newShelf) => {
+    changeShelf = (selectedBook, newShelf) => {
         // Keep track of shelves if something goes wrong in request
         var shelvesBeforeRequest = this.state.shelves
+        var found = false
 
         // This is a local solution to update the state 
         // Assume all will go well with the server and update the view. 
         // If an error happens, the view will be updated again below in the error function of the promise
         // A different solution would be to send a network request to retrieve the new list of books for the user
         var allBooks = this.state.allBooks.map(book => {
-            if (book.id === bookId) {
+            if (book.id === selectedBook.id) {
                 book.shelf = newShelf
+                found = true
             }
             return book
         })
 
+        if (!found) {
+            allBooks.concat(selectedBook)
+        }
+        
         this.setState({
             shelves: _.groupBy(allBooks, (book) => (book.shelf))
         })
 
         // Send request to update book
-        BooksAPI.update(bookId, newShelf).then(() => {
+        BooksAPI.update(selectedBook, newShelf).then(() => {
 
             // All is good. Show some side notification of success or saved.
             console.log('success')
@@ -79,6 +92,26 @@ class BooksApp extends Component {
         })
     }
 
+    searchForBooks = (queryString) => {
+        queryString = queryString.trim()
+
+        if (queryString.length > 0) {
+            BooksAPI.search(queryString, 20).then((response) => {
+                if (response.hasOwnProperty('error')) {
+                    this.setState({
+                        searchErrorMessage: response.error,
+                        searchBooks: []
+                    })
+                } else {
+                    this.setState({
+                        searchErrorMessage: false,
+                        searchBooks: response
+                    })
+                }
+            })
+        }
+    }
+
     render() {
         return (
             <div className="app">
@@ -88,7 +121,14 @@ class BooksApp extends Component {
                         changeShelf={this.changeShelf}
                     />
                 )} />
-                <Route path='/search' render={() => (<Search />)} />
+                <Route path='/search' render={() => (
+                    <Search
+                        searchForBooks={this.searchForBooks}
+                        changeShelf={this.changeShelf}
+                        books={this.state.searchBooks}
+                        error={this.state.searchErrorMessage}
+                    />
+                )} />
             </div>
         )
     }
