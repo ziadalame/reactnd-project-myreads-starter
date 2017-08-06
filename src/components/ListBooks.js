@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 // shelf component
 import Shelf from './Shelf';
 
-function ListBooks(props) {
+const ListBooks = (props) => {
 
     return (
         <div className="list-books">

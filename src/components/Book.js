@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-function Book({ book, changeShelf }) {
+const Book = ({ book, changeShelf }) => {
 
     var { id, imageLinks, title, authors } = book
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function TheWildWest() {
+const TheWildWest = () => {
 
     return (
         <div>
