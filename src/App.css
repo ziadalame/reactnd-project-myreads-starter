@@ -189,3 +189,21 @@ body, .app {
   text-align: center;
   font-size: 0.8em;
 }
+
+/* Success and error popup messages  */
+.message {
+  position: fixed;
+  left: 25px;
+  bottom: 25px;
+  padding: 15px;
+  z-index: 1;
+  color: white
+}
+
+.message.success{
+  background-color: #2e7d32;
+}
+
+.message.error {
+  background-color: #8F1D21
+}

@@ -20,6 +20,8 @@ class BooksApp extends Component {
             books: [],
             searchBooks: [],
             searchErrorMessage: false,
+            message: '',
+            messageClass: '',
             queryString: ''
         }
 
@@ -52,15 +54,35 @@ class BooksApp extends Component {
         // Send request to update book
         BooksAPI.update(selectedBook, newShelf).then((book) => {
             // All is good. Show some side notification of success or saved.
-            console.log('success')
+            this.setState({
+                message: 'Shelf Updates',
+                messageClass: 'success'
+            })
+
+            setTimeout(() => {
+                this.setState({
+                    message: '',
+                    messageClass: ''
+                })
+            }, 1000)
         }, (error) => {
             // an error has occured - show some error sign 
-            console.log('error', error)
             selectedBook.shelf = oldShelf
             let books = this.state.books.filter(book => book.id !== selectedBook.id).concat(selectedBook)
             this.setState({
                 books
             })
+            this.setState({
+                message: 'An error has occurred updating your shelf',
+                messageClass: 'error'
+            })
+            
+            setTimeout(() => {
+                this.setState({
+                    message: '',
+                    messageClass: ''
+                })
+            }, 1000)
 
         })
     }
@@ -78,8 +100,17 @@ class BooksApp extends Component {
                 if (response.hasOwnProperty('error')) {
                     this.setState({
                         searchErrorMessage: response.error,
+                        message: 'An error in your search has occured',
+                        messageClass: 'error',
                         searchBooks: []
                     })
+
+                    setTimeout(() => {
+                        this.setState({
+                            message: '',
+                            messageClass: ''
+                        })
+                    }, 1000)
                 } else {
                     var intersectionBook = []
                     // Map over the response and search if the book exists in the currnt books. 
@@ -106,6 +137,7 @@ class BooksApp extends Component {
     render() {
         return (
             <div className="app">
+                {this.state.message && <div className={`message ${this.state.messageClass}`}>{this.state.message}</div>}
                 <Switch>
                     <Route exact path='/' render={() => (
                         <ListBooks
