@@ -12,7 +12,7 @@ const Book = ({ book, changeShelf }) => {
                 <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${imageLinks !== undefined ? imageLinks.thumbnail : ''})` }}></div>
                     <div className="book-shelf-changer">
-                        <select value={shelf || 'none'} onChange={(changeEvent) => (changeEvent.target.value !== 'none' ? changeShelf(book, changeEvent.target.value) : null )}>
+                        <select value={shelf || 'none'} onChange={(changeEvent) => (changeShelf(book, changeEvent.target.value))}>
                             <option value="none" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>
