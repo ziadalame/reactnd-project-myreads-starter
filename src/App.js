@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import * as BooksAPI from './utils/BooksAPI'
 // Router
-import { Route } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 // Utilities
 import _ from 'lodash';
 // Components
 import ListBooks from './components/ListBooks'
 import Search from './components/Search'
+import TheWildWest from './components/TheWildWest'
 // Style
 import './App.css'
 
@@ -86,20 +87,23 @@ class BooksApp extends Component {
     render() {
         return (
             <div className="app">
-                <Route exact path='/' render={() => (
-                    <ListBooks
-                        books={this.state.books}
-                        changeShelf={this.changeShelf}
-                    />
-                )} />
-                <Route path='/search' render={() => (
-                    <Search
-                        searchForBooks={this.searchForBooks}
-                        changeShelf={this.changeShelf}
-                        books={this.state.searchBooks}
-                        error={this.state.searchErrorMessage}
-                    />
-                )} />
+                <Switch>
+                    <Route exact path='/' render={() => (
+                        <ListBooks
+                            books={this.state.books}
+                            changeShelf={this.changeShelf}
+                        />
+                    )} />
+                    <Route path='/search' render={() => (
+                        <Search
+                            searchForBooks={this.searchForBooks}
+                            changeShelf={this.changeShelf}
+                            books={this.state.searchBooks}
+                            error={this.state.searchErrorMessage}
+                        />
+                    )} />
+                    <Route component={TheWildWest} />
+                </Switch>
             </div>
         )
     }
