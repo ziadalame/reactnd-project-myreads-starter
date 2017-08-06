@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import * as BooksAPI from './utils/BooksAPI'
 // Router
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 // Utilities
 import _ from 'lodash';
 // Components
@@ -19,7 +19,8 @@ class BooksApp extends Component {
         this.state = {
             books: [],
             searchBooks: [],
-            searchErrorMessage: false
+            searchErrorMessage: false,
+            queryString: ''
         }
 
         // Throtle search to not spam the server
@@ -65,9 +66,14 @@ class BooksApp extends Component {
     }
 
     searchForBooks = (queryString) => {
+        // remove uneeded spaces
         queryString = queryString.trim()
 
         if (queryString.length > 0) {
+            this.setState({
+                queryString,
+                searchBooks: []
+            })
             BooksAPI.search(queryString, 20).then((response) => {
                 if (response.hasOwnProperty('error')) {
                     this.setState({
@@ -75,9 +81,22 @@ class BooksApp extends Component {
                         searchBooks: []
                     })
                 } else {
+                    var intersectionBook = []
+                    // Map over the response and search if the book exists in the currnt books. 
+                    // If it exists return the book in library else return the book from search
+                    let books = response.map((book) => {
+                        intersectionBook = _.intersectionBy(this.state.books, [book], 'id')
+                        if (intersectionBook.length > 0) {
+                            return intersectionBook[0]
+                        } else {
+                            book.shelf = 'none'
+                            return book
+                        }
+                    })
+
                     this.setState({
                         searchErrorMessage: false,
-                        searchBooks: response
+                        searchBooks: books
                     })
                 }
             })
@@ -100,6 +119,7 @@ class BooksApp extends Component {
                             changeShelf={this.changeShelf}
                             books={this.state.searchBooks}
                             error={this.state.searchErrorMessage}
+                            queryString={this.state.queryString}
                         />
                     )} />
                     <Route component={TheWildWest} />

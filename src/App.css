@@ -114,6 +114,12 @@ body, .app {
     padding: 10px;
 }
 
+.search-query {
+  background-color: #efefef;
+  margin: 10px 15px;
+  padding: 15px;
+}
+
 /* books grid */
 
 .books-grid {

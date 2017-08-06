@@ -5,8 +5,14 @@ import _ from 'lodash'
 
 class Search extends Component {
 
+    componentDidMount() {
+        // This is to add some books when the search page opens and there was no previous search
+        if (this.props.books.length === 0) {
+            this.props.searchForBooks('Shakespeare')
+        }
+    }
+
     render() {
-        console.log(this.props)
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -17,6 +23,7 @@ class Search extends Component {
                 </div>
                 <div className="search-books-results">
                     {this.props.error && (<div className="search-error">{this.props.error}</div>)}
+                    {this.props.queryString && (<div className="search-query" >Showing results for: {this.props.queryString}</div>)}
                     <ol className="books-grid">
                         {this.props.books.map((book) => {
                             return (
