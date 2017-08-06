@@ -17,18 +17,30 @@ function ListBooks(props) {
             </div>
             <div className="list-books-content">
                 <div>
-                    {Object.keys(props.shelves).map((title) => {
-                        return (<Shelf
-                            key={title}
-                            title={_.startCase(title)}
-                            books={props.shelves[title]}
+                    <div>
+                        <Shelf
+                            books={props.books.filter(book => book.shelf === 'currentlyReading')}
+                            key='currentlyReading'
+                            title='Currently Reading'
                             changeShelf={props.changeShelf}
-                        />)
-                    })}
+                        />
+                        <Shelf
+                            books={props.books.filter(book => book.shelf === 'wantToRead')}
+                            key='wantToRead'
+                            title='Want To Read'
+                            changeShelf={props.changeShelf}
+                        />
+                        <Shelf
+                            books={props.books.filter(book => book.shelf === 'read')}
+                            key='read'
+                            title='Read'
+                            changeShelf={props.changeShelf}
+                        />
+                    </div>
                 </div>
-            </div>
-            <div className="open-search">
-                <Link to='/search'>Add a book</Link>
+                <div className="open-search">
+                    <Link to='/search'>Add a book</Link>
+                </div>
             </div>
         </div>
     )
@@ -36,7 +48,7 @@ function ListBooks(props) {
 }
 
 ListBooks.propTypes = {
-    shelves: PropTypes.object.isRequired,
+    books: PropTypes.array.isRequired,
     changeShelf: PropTypes.func // isRequired is not necessary as it is always available
 }
 

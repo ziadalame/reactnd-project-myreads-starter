@@ -16,12 +16,7 @@ class BooksApp extends Component {
         super(props)
 
         this.state = {
-            allBooks: [],
-            shelves: {
-                currentlyReading: [],
-                wantToRead: [],
-                read: []
-            },
+            books: [],
             searchBooks: [],
             searchErrorMessage: false
         }
@@ -33,60 +28,38 @@ class BooksApp extends Component {
     // Fetch data after render finishes
     componentDidMount() {
         this.getAllBooks().then((data) => {
-            this.setState(data)
+            this.setState({ books: data })
         })
     }
 
     getAllBooks = () => {
-        return BooksAPI.getAll().then(allBooks => {
-            // create json with unique self keys
-            // each key has an array of books
-            // this allows for dynamic shelf and book creation
-            return { shelves: _.groupBy(allBooks, (book) => (book.shelf)), allBooks }
+        return BooksAPI.getAll().then(books => {
+            return books
         }, function (error) {
             console.log('An error has occurred. Details: ' + error)
         })
     }
 
     changeShelf = (selectedBook, newShelf) => {
-        // Keep track of shelves if something goes wrong in request
-        var shelvesBeforeRequest = this.state.shelves
-        var found = false
-
-        // This is a local solution to update the state 
-        // Assume all will go well with the server and update the view. 
-        // If an error happens, the view will be updated again below in the error function of the promise
-        // A different solution would be to send a network request to retrieve the new list of books for the user
-        var allBooks = this.state.allBooks.map(book => {
-            if (book.id === selectedBook.id) {
-                book.shelf = newShelf
-                found = true
-            }
-            return book
-        })
-
-        if (!found) {
-            allBooks.concat(selectedBook)
-        }
-
+        let oldShelf = selectedBook.shelf
+        selectedBook.shelf = newShelf
+        let books = this.state.books.filter(book => book.id !== selectedBook.id).concat(selectedBook)
         this.setState({
-            shelves: _.groupBy(allBooks, (book) => (book.shelf))
+            books
         })
-
         // Send request to update book
-        BooksAPI.update(selectedBook, newShelf).then(() => {
-
+        BooksAPI.update(selectedBook, newShelf).then((book) => {
             // All is good. Show some side notification of success or saved.
             console.log('success')
-
         }, (error) => {
             // an error has occured - show some error sign 
             console.log('error', error)
-
-            // change state to old state as changes were not saved
+            selectedBook.shelf = oldShelf
+            let books = this.state.books.filter(book => book.id !== selectedBook.id).concat(selectedBook)
             this.setState({
-                shelves: shelvesBeforeRequest
+                books
             })
+
         })
     }
 
@@ -115,7 +88,7 @@ class BooksApp extends Component {
             <div className="app">
                 <Route exact path='/' render={() => (
                     <ListBooks
-                        shelves={this.state.shelves}
+                        books={this.state.books}
                         changeShelf={this.changeShelf}
                     />
                 )} />
