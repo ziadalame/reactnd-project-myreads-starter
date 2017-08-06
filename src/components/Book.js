@@ -1,17 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import shortid from 'shortid';
 
 const Book = ({ book, changeShelf }) => {
 
-    var { id, imageLinks, title, authors } = book
+    var { imageLinks, title, authors, shelf } = book
 
     return (
-        <li key={id}>
+        <li key={shortid.generate()}>
             <div className="book">
                 <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${imageLinks !== undefined ? imageLinks.thumbnail : ''})` }}></div>
                     <div className="book-shelf-changer">
-                        <select value={book.shelf || 'none'} onChange={(changeEvent) => (changeEvent.target.value !== 'none' ? changeShelf(book, changeEvent.target.value) : null )}>
+                        <select value={shelf || 'none'} onChange={(changeEvent) => (changeEvent.target.value !== 'none' ? changeShelf(book, changeEvent.target.value) : null )}>
                             <option value="none" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>

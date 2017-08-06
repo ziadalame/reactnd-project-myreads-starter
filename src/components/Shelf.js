@@ -6,6 +6,8 @@ import Book from './Book'
 // Instead of creating a class, I created shelf as a function. 
 // Props is now accessed as a first parameter thus making this component independent from context
 const Shelf = ({ title, books, changeShelf }) => {
+
+
     return (
         <div className="bookshelf">
             <h2 className="bookshelf-title">{title}</h2>

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import Book from './Book'
 import _ from 'lodash'
+import shortid from 'shortid';
 
 class Search extends Component {
 
@@ -13,6 +14,7 @@ class Search extends Component {
     }
 
     render() {
+
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -28,7 +30,7 @@ class Search extends Component {
                         {this.props.books.map((book) => {
                             return (
                                 <Book
-                                    key={book.id}
+                                    key={shortid.generate()}
                                     book={book}
                                     changeShelf={this.props.changeShelf}
                                 />
